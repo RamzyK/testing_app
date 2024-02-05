@@ -23,36 +23,31 @@ jobs:
             sudo update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
             sudo update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
             java -version
-      - run: 
-          name:  Install Ruby
-          command: sudo apt-get install rubygems
-      - run: 
-          name:  Install Builder dependency manager
-          command: gem install bundler
-      - run:
-          name: Install Fastlane
-          command: sudo gem install fastlane
-      - run: 
-          name: Start CI process
-          command: fastlane ci_process
       - run:
           name: Assemble debug build
           command: ./gradlew assembleDebug
-          # Conditionner la livraison sur TestApp.io avec des test unitaire
-      #- run:
-      #     name: Run Unit tests
-      #    command: ./gradlew test
-      - android/start-emulator-and-run-tests:
-          test-command: ./gradlew connectedDebugAndroidTest
-          system-image: system-images;android-30;google_apis;x86
+      - android/create-avd:
+          avd-name: exampleavd
+          install: true
+          system-image: system-images;android-29;default;x86
+      - android/start-emulator:
+          avd-name: exampleavd
+          no-window: true
+          restore-gradle-cache-prefix: v1a
       - run:
-          name: Upload app to Testapp.io
+          name: Install Fastlane dependencies
+          command: bundle install
+      - run:
+          name: Run fastlane ui tests
+          command: bundle exec fastlane ci_processes
+      - run:
+          name: Upload to TestApp.io
           command: |
             export INSTALL_DIR=/tmp
             curl -Ls https://github.com/testappio/cli/releases/latest/download/install | bash
-            $INSTALL_DIR/ta-cli publish --api_token=$TESTAPPIO_API_TOKEN --app_id=$TESTAPPIO_APP_ID --release="android" --apk=./app/build/outputs/apk/debug/app-debug.apk --release_notes=$release_notes --notify=$notify --git_release_notes=$git_release_notes --git_commit_id=$git_commit_id --source="Circle CI"
+            $INSTALL_DIR/ta-cli publish --api_token=$API_TOKEN --app_id=$APP_ID --release="android" --apk=./app/build/outputs/apk/debug/app-debug.apk --release_notes=$release_notes --notify=$notify --git_release_notes=$git_release_notes --git_commit_id=$git_commit_id --source="Circle CI"
 
 workflows:
   tesappio-release:
       jobs:
-        - build-and-upload
+        - build-and-upload      
