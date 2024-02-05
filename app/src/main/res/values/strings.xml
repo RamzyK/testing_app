@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AndroidTestingApp</string>
+    <string name="main_activity_central_button_launch_second_activity_text">Second activity</string>
+    <string name="second_activity_btn_text">Back to main activity</string>
+</resources>
