@@ -47,10 +47,30 @@ platform :android do
     gradle(task: ":app:testDebugUnitTest --tests \"com.example.androidtestingapp.CalculatriceTest\"")
   end
 
-  desc "Runing UI tests"
-  lane :ui_test do
+  desc "Runing MainActivity UI tests"
+  lane :main_ui_test do
     gradle(task: "app:connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.example.androidtestingapp.MainActivityTest")
   end
+
+  desc "Runing SecondActivity UI tests"
+  lane :second_activity_ui_test do
+    gradle(task: "app:connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.example.androidtestingapp.MainActivityTest")
+  end
+
+
+  desc "Running continuous integration processes"
+  lane : ci_process do
+    unit_test
+    main_ui_test
+    second_activity_ui_test
+  end
+
+
+
+
+
+
+
 end
 
 

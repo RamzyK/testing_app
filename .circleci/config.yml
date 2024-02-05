@@ -30,8 +30,8 @@ jobs:
           name: Install Fastlane
           command: sudo gem install fastlane
       - run: 
-        name: Start CI process
-        command: fastlane ci_process
+          name: Start CI process
+          command: fastlane ci_process
       - run:
           name: Assemble debug build
           command: ./gradlew assembleDebug
