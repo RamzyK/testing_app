@@ -24,6 +24,9 @@ jobs:
             sudo update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
             java -version
       - run: 
+          name:  Install Ruby
+          command: sudo apt-get install rubygems
+      - run: 
           name:  Install Builder dependency manager
           command: gem install bundler
       - run:
