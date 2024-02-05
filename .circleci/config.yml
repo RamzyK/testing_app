@@ -1,4 +1,3 @@
-```yaml
 version: 2.1
 
 orbs:
@@ -45,4 +44,3 @@ workflows:
   tesappio-release:
       jobs:
         - build-and-upload
-```
